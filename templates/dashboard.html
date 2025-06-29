@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head><title>Panel</title></head>
+<body>
+<h2>Ostatnie zgłoszenia</h2>
+<table border="1">
+    <tr><th>Nastrój</th><th>Komentarz</th><th>Data</th></tr>
+    {% for mood, comment, timestamp in entries %}
+        <tr>
+            <td>{{ mood }}</td>
+            <td>{{ comment }}</td>
+            <td>{{ timestamp }}</td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

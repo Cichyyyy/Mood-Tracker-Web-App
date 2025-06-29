@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head><title>Nastrój</title></head>
+<body>
+<h2>Jak się dziś czujesz?</h2>
+<form action="/submit" method="post">
+    <select name="mood" required>
+        <option value="">-- wybierz --</option>
+        <option value="😀">Zadowolony</option>
+        <option value="😐">Neutralny</option>
+        <option value="😞">Zmęczony</option>
+    </select><br><br>
+    <textarea name="comment" placeholder="Komentarz..."></textarea><br><br>
+    <button type="submit">Wyślij</button>
+</form>
+</body>
+</html>
