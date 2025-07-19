@@ -1,17 +1,36 @@
 <!DOCTYPE html>
-<html>
-<head><title>Nastrój</title></head>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Nastrój</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
 <body>
-<h2>Jak się dziś czujesz?</h2>
-<form action="/submit" method="post">
-    <select name="mood" required>
-        <option value="">-- wybierz --</option>
-        <option value="😀">Zadowolonyy</option>
-        <option value="😐">Neutralny</option>
-        <option value="😞">Zmęczony</option>
-    </select><br><br>
-    <textarea name="comment" placeholder="Komentarz..."></textarea><br><br>
-    <button type="submit">Wyślij</button>
-</form>
+
+    <form action="/submit" method="post">
+    <input type="hidden" name="work_id" value="{{ work_id }}">
+
+        <h2>How do you feel?</h2>
+
+        <div class="emoji-selector">
+            <input type="radio" name="mood" value="😂" id="awesome" required>
+            <label for="awesome">😂</label>
+
+            <input type="radio" name="mood" value="😀" id="happy" required>
+            <label for="happy">😀</label>
+
+            <input type="radio" name="mood" value="😐" id="neutral">
+            <label for="neutral">😐</label>
+
+            <input type="radio" name="mood" value="😞" id="tired">
+            <label for="tired">😞</label>
+
+            <input type="radio" name="mood" value="😩" id="bored">
+            <label for="bored">😩</label>
+        </div>
+
+        <textarea name="comment"></textarea>
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>

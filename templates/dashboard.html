@@ -1,17 +1,136 @@
 <!DOCTYPE html>
-<html>
-<head><title>Panel</title></head>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <style>
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            padding: 8px 14px;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        .delete-btn {
+            margin-top: 10px;
+        }
+
+        table button {
+            margin-right: 5px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .modal-content button {
+            margin: 10px;
+            padding: 8px 16px;
+        }
+    </style>
+</head>
 <body>
-<h2>Ostatnie zgłoszenia</h2>
-<table border="1">
-    <tr><th>Nastrójj</th><th>Komentarz</th><th>Data</th></tr>
-    {% for mood, comment, timestamp in entries %}
-        <tr>
-            <td>{{ mood }}</td>
-            <td>{{ comment }}</td>
-            <td>{{ timestamp }}</td>
-        </tr>
-    {% endfor %}
-</table>
+<div class="container">
+    <div class="top-bar">
+        <h2>Ostatnie zgłoszenia</h2>
+        <a class="logout-btn" href="/logout">Wyloguj</a>
+    </div>
+
+    <form method="get" class="filter-form">
+        <input type="text" name="work_id" placeholder="Filtruj po Work ID" value="{{ request.args.get('work_id', '') }}">
+        <button type="submit">Filtruj</button>
+    </form>
+
+    <form method="post" action="/delete_entries" id="bulkDeleteForm">
+        <table>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" onclick="toggleSelectAll(this)"></th>
+                    <th>Work ID</th>
+                    <th>Nastrój</th>
+                    <th>Komentarz</th>
+                    <th>Data</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for mood, comment, timestamp, work_id, id in entries %}
+                <tr>
+                    <td><input type="checkbox" name="delete_ids" value="{{ id }}"></td>
+                    <td>{{ work_id }}</td>
+                    <td>{{ mood }}</td>
+                    <td>{{ comment }}</td>
+                    <td>{{ timestamp|format_datetime }}</td>
+                    <td>
+                        <button type="button" onclick="window.location.href='/edit/{{ id }}'">Edytuj</button>
+                        <button type="button" onclick="openModal({{ id }})">Usuń</button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="delete-btn styled-delete">🗑️ Usuń zaznaczone</button>
+    </form>
+</div>
+
+<!-- Modal potwierdzenia -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <p>Czy na pewno chcesz usunąć ten wpis?</p>
+        <form method="post" action="/delete_entries">
+            <input type="hidden" name="delete_ids" id="modalEntryId">
+            <button type="submit">Tak, usuń</button>
+            <button type="button" onclick="closeModal()">Anuluj</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleSelectAll(source) {
+        const checkboxes = document.querySelectorAll('input[name="delete_ids"]');
+        for (let checkbox of checkboxes) {
+            checkbox.checked = source.checked;
+        }
+    }
+
+    function openModal(id) {
+        document.getElementById('modalEntryId').value = id;
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+</script>
 </body>
 </html>
