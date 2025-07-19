@@ -9,7 +9,6 @@ A simple and modern mood tracking system built with Python (Flask). Each employe
 - 🕒 One entry allowed every 24 hours per user
 - 😊 Mood selection via emojis + optional comment
 - 🧾 Admin dashboard to view, edit, and delete entries
-- 🎨 Responsive UI with smooth CSS animations
 
 ## Tech Stack
 
